@@ -1,4 +1,4 @@
-import todoResource from "./todoResource"
+import { Api } from "../api/ApiConfig"
 
 interface Todo {
     _id: string | null,
@@ -8,7 +8,8 @@ interface Todo {
 
 const getTodos = async () => {
     try {
-        return await todoResource.getTodos({})
+        const { data } = await Api().get(`/`, {})
+        return data
     } catch (err) {
         return null
     }
@@ -19,15 +20,22 @@ const save = async ({ description }: { description: string }): Promise<Todo> => 
         description: description
     }
 
-    return todoResource.createTodo({}, todo)
+    const {data} = await Api().post('/', todo, {})
+
+    const result = {
+      _id: data._id,
+      description: data.description,
+      done: data.done
+    }
+
+    return result
 }
 
-const deleteTodo = async ({ id }: { id: string | null}): Promise<void> => {
-    if (id !== null){
-        todoResource.deleteTodo({id}, {})
+const deleteTodo = async ({ id }: { id: string | null }): Promise<void> => {
+    if (id !== null) {
+        await Api().delete(`/${id}`,{})
     }
 }
-
 
 export default {
     getTodos,

@@ -22,7 +22,6 @@ export const useTodoStore = create<TodoStore>((set) => ({
         set((state) => ({
             todos: [...state.todos, newTodo]
         }))
-        window.location.reload()
     },
 
     removeTodo: (id) => {
@@ -30,7 +29,6 @@ export const useTodoStore = create<TodoStore>((set) => ({
             todos: id !== null ? [...state.todos.filter(todo => todo._id !== id)] : [...state.todos]
         }))
         todoService.deleteTodo({id})
-        window.location.reload()
     },
 
     setTodos: (todosDB) => set(() => ({
